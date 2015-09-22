@@ -153,6 +153,44 @@ describe('HtmlLoader', function() {
             });
         });
 
+        it('should invoke callbacks for onError, onWarnings and onItemLoadComplete', function (done) {
+
+            this.timeout(5000);
+
+            var errorCount = 0,
+                warningCount = 0,
+                itemCompleteCount = 0,
+                queue = [
+                    new HtmlLoader.LoaderItem('https://bogus-url-that-should-fail'),
+                    new HtmlLoader.LoaderItem('https://www.google.com.au/#q=hello')
+                ];
+
+            htmlLoader.onWarning(function(loaderItem, done){
+                warningCount++;
+                done(loaderItem);
+            });
+
+            htmlLoader.onError(function(loaderItem, done){
+                errorCount++;
+                done(loaderItem);
+            });
+
+            htmlLoader.onItemLoadComplete(function(loaderItem, done){
+                itemCompleteCount++;
+                done(loaderItem);
+            });
+
+            htmlLoader.load(queue, function(err, results){
+                assert(err === null, 'Error should not exist');
+                assert(!_.isNull(results), 'results should exist');
+                assert(_.isArray(results), 'results should be an Array');
+                assert(errorCount === 1, 'Errorcount should be 1');
+                assert(warningCount === 3, 'warningCount should be 3');
+                assert(itemCompleteCount === 1, 'Errorcount should be 1');
+                done();
+            });
+        });
+
         it('should support method chaining', function (done) {
 
             this.timeout(5000);
@@ -163,28 +201,28 @@ describe('HtmlLoader', function() {
                     new HtmlLoader.LoaderItem('https://www.google.com.au/#q=hello')
                 ];
 
-            var loader = new HtmlLoader()
-            .setHttpTimeout(1000)
-            .setNumRetries(3)
-            .setHttpThrottle(5)
-            .onWarning(function(loaderItem, done){
-                done(loaderItem);
-            })
+            new HtmlLoader()
+                .setHttpTimeout(1000)
+                .setNumRetries(3)
+                .setHttpThrottle(5)
+                .onWarning(function(loaderItem, done){
+                    done(loaderItem);
+                })
 
-            .onError(function(loaderItem, done){
-                done(loaderItem);
-            })
+                .onError(function(loaderItem, done){
+                    done(loaderItem);
+                })
 
-            .onItemLoadComplete(function(loaderItem, done){
-                done(loaderItem);
-            })
+                .onItemLoadComplete(function(loaderItem, done){
+                    done(loaderItem);
+                })
 
-            .load(queue, function(err, results){
-                assert(err === null, 'Error should not exist');
-                assert(!_.isNull(results), 'results should exist');
-                assert(_.isArray(results), 'results should be an Array');
-                done();
-            });
+                .load(queue, function(err, results){
+                    assert(err === null, 'Error should not exist');
+                    assert(!_.isNull(results), 'results should exist');
+                    assert(_.isArray(results), 'results should be an Array');
+                    done();
+                });
         });
 
         it('should create a loaderItem using htmlLoader.getLoaderItem() method', function (done) {
