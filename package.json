@@ -1,18 +1,15 @@
 {
-  "name": "bulk-web-scraper",
-  "description": "Bulk loader and HTML scraper built to get the HTML contents of thousands of webpages at once",
-  "version": "1.0.0",
+  "name": "bulk-html-loader",
+  "description": "Scrape HTML from thosands of urls in one go",
+  "version": "1.0.2",
   "main": "lib/HtmlLoader.js",
   "files": [
     "lib"
   ],
-  "author": {
-    "name": "Christian Rich",
-    "email": "christianrich.me@gmail.com"
-  },
+  "author": "Christian Rich <christianrich.me@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ChristianDen/bulk-html-loader.git"
+    "url": "git+https://github.com/ChristianRich/bulk-html-loader.git"
   },
   "keywords": [
     "scrape html",
@@ -32,5 +29,18 @@
     "mocha": "latest",
     "ping": "^0.1.10",
     "should": "^7.1.0"
+  },
+
+  "browserDependencies": "",
+  "bugs": {
+    "url": "https://github.com/ChristianRich/bulk-html-loader/issues"
+  },
+  "homepage": "https://github.com/ChristianRich/bulk-html-loader#readme",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
   }
 }
