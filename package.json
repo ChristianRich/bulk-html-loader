@@ -1,6 +1,6 @@
 {
   "name": "bulk-web-scraper",
-  "description": "Bulk loader and HTML scraper built to get the HTML contents of hundreds of webpages at once",
+  "description": "Bulk loader and HTML scraper built to get the HTML contents of thousands of webpages at once",
   "version": "1.0.0",
   "main": "lib/HtmlLoader.js",
   "files": [
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ChristianDen/bulk-web-scraper.git"
+    "url": "git+https://github.com/ChristianDen/bulk-html-loader.git"
   },
   "keywords": [
     "scrape html",
