@@ -1,0 +1,36 @@
+{
+  "name": "bulk-web-scraper",
+  "description": "Bulk loader and HTML scraper built to get the HTML contents of hundreds of webpages at once",
+  "version": "1.0.0",
+  "main": "lib/HtmlLoader.js",
+  "files": [
+    "lib"
+  ],
+  "author": {
+    "name": "Christian Rich",
+    "email": "christianrich.me@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChristianDen/bulk-web-scraper.git"
+  },
+  "keywords": [
+    "scrape html",
+    "loader",
+    "html",
+    "html loader"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "async": "1.4.2",
+    "cheerio": "^0.19.0",
+    "lodash": "^3.10.1",
+    "request": "^2.61.0",
+    "uuid": "^2.0.1"
+  },
+  "devDependencies": {
+    "mocha": "latest",
+    "ping": "^0.1.10",
+    "should": "^7.1.0"
+  }
+}
