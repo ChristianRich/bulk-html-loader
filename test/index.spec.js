@@ -177,6 +177,7 @@ describe('HtmlLoader', function() {
 
             htmlLoader.onItemLoadComplete(function(loaderItem, done){
                 itemCompleteCount++;
+                //console.log(this.getProgress().loaded + '/' + this.getProgress().total);
                 done(loaderItem);
             });
 
