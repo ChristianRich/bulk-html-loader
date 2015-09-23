@@ -1,1 +1,1 @@
-module.exports = require('./lib/HtmlLoader');
+module.exports = require('./lib/BulkHtmlLoader');
