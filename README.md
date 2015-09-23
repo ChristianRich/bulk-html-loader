@@ -7,7 +7,7 @@ Supports:
   - Queueing
   - Multiple retries
   - Graceful error handling
-  - Continous loading on errors (don't stop the queue just because some urls fail) 
+  - Continous loading on errors (don't stop the queue because some urls fail)
   - Set the maximum number of concurrent HTTP requests (default is 10)
   - Set the maximum number of retries (default is 3)
   - Set the maximum timeout per load (default is 1500 ms)
@@ -115,7 +115,7 @@ In below example we are setting a country variable which will be accessible once
 
 ```js
 
-   var Loader = require('../lib/BulkHtmlLoader')
+   var Loader = require('bulk-html-loader')
        , _ = require('lodash');
    
    // Build a queue with arbitrary data objects that is attached to the LoaderItem
@@ -173,7 +173,7 @@ In below example we are setting a country variable which will be accessible once
 For each queue you can define maximum concurrent http requests, timeout and number of retries
 
 ```js
-    var Loader = require('../lib/BulkHtmlLoader')
+    var Loader = require('bulk-html-loader')
         , _ = require('lodash');
     
     var queue = [
