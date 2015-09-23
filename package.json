@@ -1,7 +1,7 @@
 {
   "name": "bulk-html-loader",
-  "description": "Scrape HTML from thosands of urls in one go",
-  "version": "1.0.6",
+  "description": "Scrape HTML from thousands of webpages in one go",
+  "version": "1.0.7",
   "main": "lib/HtmlLoader.js",
   "files": [
     "lib"
@@ -15,7 +15,13 @@
     "scrape html",
     "loader",
     "html",
-    "html loader"
+    "html loader",
+    "url loader",
+    "url scraper",
+    "scrape url",
+    "scrape urls",
+    "scrape",
+    "scraper"
   ],
   "license": "MIT",
   "dependencies": {
