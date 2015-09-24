@@ -267,10 +267,10 @@ This way, and if anything goes haywire and the loader stops, you can restart the
 If you have this need flick me an email and I can give an example written in MongoDB.
 
 ### Unit tests
-Are located in /test
+Located in /test
 
 ### Examples
-Are location in /examples
+Located in /examples
 
 ### Limitations
 When loading HTML pages anything that is not HTML (scripts, css, iframes, noscript etc) is stripped away.
