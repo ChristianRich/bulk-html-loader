@@ -278,8 +278,7 @@ If this bothers you please lodge a ticket on Github and I will look into it.
 
 ### Legalities
 I'm a software engineer and don't know the legalities around scraping contents from websites. Just be aware that you might be in violation with the website's terms of use. If you republish the contents you are likely to be in violation with copyright laws as well.
-So... If you do dodgy things with this software and get nasty letters from lawyers don't come knocking on my door! Use responsibly.
-
+If you do dodgy things with this software and get nasty letters from lawyers don't come knocking on my door! Use responsibly.
 
 License
 ----
