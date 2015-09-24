@@ -7,10 +7,10 @@ Features:
   - Queueing
   - Automatic retries
   - Graceful error handling
-  - Continous loading on errors (don't stop the queue because some urls fail)
+  - Continuous loading on errors (don't stop the queue because some urls fail)
   - Configure maximum number of concurrent HTTP requests, retries and load timeout
   - Random user agent string in each HTTP request (lower risk of the remote server rejecting the request)
-  - Event driven so you can handle individual warnings, errors and comleted loads before the queue completes
+  - Event driven so you can handle individual warnings, errors and completed loads before the queue completes
   
 ### Installation
 
@@ -258,10 +258,10 @@ I've tested the tool and have loaded 20,000+ pages from the same host, but only 
 
 ### VPN
 If you need to load large quantities of pages from the same host I recommend doing so behind a VPN and switch IP from time to time.
-If one IP has been blacklistet from the host, you just switch country and start again.
+If one IP has been blacklisted from the host, you just switch country and start again.
 
 ### Database integration
-If you're serious about loading large quantities of data from other websites you need some kind of persistant storage to keep track of which loads were successful and which were not.
+If you're serious about loading large quantities of data from other websites you need some kind of persistent storage to keep track of which loads were successful and which were not.
 This way, and if anything goes haywire and the loader stops, you can restart the script from where you left off without any gaps in your data.
 
 If you have this need flick me an email and I can give an example written in MongoDB.
@@ -269,12 +269,21 @@ If you have this need flick me an email and I can give an example written in Mon
 ### Unit tests
 Located in /test
 
+To run the tests:
+npm test 
+
 ### Examples
 Located in /examples
 
+To run the examples:
+
+node examples/basic
+node examples/advanced
+node examples/customObject
+
 ### Limitations
 When loading HTML pages anything that is not HTML (scripts, css, iframes, noscript etc) is stripped away.
-If this bothers you please lodge a ticket on Github and I will look into it.
+If this bothers you please create an issue at https://github.com/ChristianRich/bulk-html-loader/issues
 
 ### Legalities
 I'm a software engineer and don't know the legalities around scraping contents from websites. Just be aware that you might be in violation with the website's terms of use. If you republish the contents you are likely to be in violation with copyright laws as well.
