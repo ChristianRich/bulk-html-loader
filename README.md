@@ -12,6 +12,12 @@ Features:
   - Random user agent string in each HTTP request (lower risk of the remote server rejecting the request)
   - Event driven so you can handle individual warnings, errors and comleted loads before the queue completes
   
+### Installation
+
+```sh
+$ npm install bulk-html-loader --save
+```
+  
 # Examples
 
 ### Basic
@@ -119,7 +125,7 @@ Features:
        /**
        * Individual url load complete callback (optional)
        * Here you can save the result to a database, process the result etc.
-       * Or you can just wait the the entire queue to finish and handle all the items in the final callback
+       * Or you can just wait for the entire queue to finish and handle all the items in the final callback
        */
        .onItemLoadComplete(function(loaderItem, proceed){
            proceed(loaderItem);
@@ -272,13 +278,8 @@ If this bothers you please lodge a ticket on Github and I will look into it.
 
 ### Legalities
 I'm a software engineer and don't know the legalities around scraping contents from websites. Just be aware that you might be in violation with the website's terms of use. If you republish the contents you are likely to be in violation with copyright laws as well.
-So... If you get a nasty letter from a lawer don't come knocking on my door! Use responsibly.
+So... If you do dodgy things with this software and get nasty letters from lawyers don't come knocking on my door! Use responsibly.
 
-### Installation
-
-```sh
-$ npm install bulk-html-loader --save
-```
 
 License
 ----
