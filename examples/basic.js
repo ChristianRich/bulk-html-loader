@@ -2,7 +2,7 @@ var Loader = require('../lib/BulkHtmlLoader')
     , _ = require('lodash');
 
 
-// Each http request is encapsulated in a LoaderItem instance
+// Each http request is encapsulated in a LoaderItem instance which keeps track of load progress, errors etc.
 var queue = [
     new Loader.LoaderItem('http://google.com'),
     new Loader.LoaderItem('https://www.google.com/#q=hello'),
@@ -11,12 +11,20 @@ var queue = [
 
 // Create a BulkHtmlLoader instance and start the queue
 new Loader()
-    .onError(function(loaderItem, proceed){
-        console.log(loaderItem.getStatus() + ' ' + loaderItem.getError().code + ' ' + loaderItem.getError().errno + ' ' + loaderItem.getUrl());
+
+    /**
+     * Custom warning callback (optional)
+     */
+    .onWarning(function(loaderItem, proceed){
+        console.log(loaderItem.toString()); // [Object LoaderItem] Warning {code} {description} {url}
         proceed(loaderItem);
     })
-    .onWarning(function(loaderItem, proceed){
-        console.log(loaderItem.getStatus() + ' ' + loaderItem.getError().code + ' ' + loaderItem.getError().errno + ' ' + loaderItem.getUrl());
+
+    /**
+     * Custom error callback (optional)
+     */
+    .onError(function(loaderItem, proceed){
+        console.log(loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
         proceed(loaderItem);
     })
     .load(queue, function(err, loaderItems){
@@ -34,7 +42,7 @@ new Loader()
                 htmlRes = cheerio.html()
             }
 
-            console.log(loaderItem.getStatus() + ' Html portion of \'' + loaderItem.getUrl() + '\' = "' + (truncateString(htmlRes) || null) + '"');
+            console.log(loaderItem.toString() + ' Html = "' + (truncateString(htmlRes) || null) + '"');
         });
     });
 

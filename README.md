@@ -2,16 +2,15 @@
 
 Scrape HTML from thousands of web pages in a single go.
 
-Supports:
+Features:
 
   - Queueing
-  - Multiple retries
+  - Automatic retries
   - Graceful error handling
   - Continous loading on errors (don't stop the queue because some urls fail)
-  - Set the maximum number of concurrent HTTP requests (default is 10)
-  - Set the maximum number of retries (default is 3)
-  - Set the maximum timeout per load (default is 1500 ms)
-  - On http timeout errors, increase the timeout and try again
+  - Configure maximum number of concurrent HTTP requests, retries and load timeout
+  - Random user agent string in each HTTP request (lower risk of the remote server rejecting the request)
+  - Event driven so you can handle individual warnings, errors and comleted loads before the queue completes
   
 # Examples
 
@@ -19,93 +18,146 @@ Supports:
 
 ```js
 
-    var Loader = require('bulk-html-loader')
-        , _ = require('lodash');
-        
-    // Each http request is encapsulated in a LoaderItem instance
-    var queue = [
-        new Loader.LoaderItem('http://google.com'),
-        new Loader.LoaderItem('https://www.google.com/#q=hello'),
-        new Loader.LoaderItem('https://www.google.com/#q=nodejs')
-    ];
-    
-    // Create a BulkHtmlLoader instance and start the queue
-    new Loader()
-        .onError(function(loaderItem, proceed){
-            console.log(loaderItem.getStatus() + ' ' + loaderItem.getError().code + ' ' + loaderItem.getError().errno + ' ' + loaderItem.getUrl());
-            proceed(loaderItem);
-        })
-        .onWarning(function(loaderItem, proceed){
-            console.log(loaderItem.getStatus() + ' ' + loaderItem.getError().code + ' ' + loaderItem.getError().errno + ' ' + loaderItem.getUrl());
-            proceed(loaderItem);
-        })
-        .load(queue, function(err, loaderItems){
-    
-            if(err){
-                throw err;
-            }
-    
-            _.each(loaderItems, function(loaderItem){
-    
-                var htmlRes;
-    
-                if(loaderItem.getResult()) {
-                    var cheerio = loaderItem.getResult();
-                    console.log(cheerio.html())
-                }
-            });
-        });
-    };
+   var Loader = require('bulk-html-loader')
+       , _ = require('lodash');
+   
+   
+   // Each http request is encapsulated in a LoaderItem instance which keeps track of load progress, errors etc.
+   var queue = [
+       new Loader.LoaderItem('http://google.com'),
+       new Loader.LoaderItem('https://www.google.com/#q=hello'),
+       new Loader.LoaderItem('https://www.google.com/#q=nodejs')
+   ];
+   
+   // Create a BulkHtmlLoader instance and start the queue
+   new Loader()
+   
+       /**
+        * Custom warning callback (optional)
+        */
+       .onWarning(function(loaderItem, proceed){
+           console.log(loaderItem.toString()); // [Object LoaderItem] Warning {code} {description} {url}
+           proceed(loaderItem);
+       })
+   
+       /**
+        * Custom error callback (optional)
+        */
+       .onError(function(loaderItem, proceed){
+           console.log(loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
+           proceed(loaderItem);
+       })
+       .load(queue, function(err, loaderItems){
+   
+           if(err){
+               throw err;
+           }
+   
+           _.each(loaderItems, function(loaderItem){
+   
+               var htmlRes;
+   
+               if(loaderItem.getResult()) {
+                   var cheerio = loaderItem.getResult();
+                   htmlRes = cheerio.html()
+               }
+   
+               console.log(loaderItem.toString() + ' Html = "' + (truncateString(htmlRes) || null) + '"');
+           });
+       });
+   
+   // Helper - not important for this example
+   var truncateString = function(s, maxLen){
+   
+       if(!s){
+           return '';
+       }
+   
+       maxLen = maxLen || 100;
+   
+       if(s.length < maxLen + 1){
+           return s;
+       }
+   
+       return s.substr(0, maxLen) + ' ... (truncated)';
+   };
 ```
 
 ### Extracting all links from 3 websites
 
 ```js
 
-    var Loader = require('bulk-html-loader')
-        , _ = require('lodash');
-    
-    var queue = [
-        new Loader.LoaderItem('http://google.com'),
-        new Loader.LoaderItem('http://stackoverflow.com'),
-        new Loader.LoaderItem('http://www.techrepublic.com')
-    ];
-    
-    new Loader()
-        .onError(function(loaderItem, proceed){
-            console.log(loaderItem.getStatus() + ' ' + loaderItem.getError().code + ' ' + loaderItem.getError().errno + ' ' + loaderItem.getUrl());
-            proceed(loaderItem);
-        })
-        .onWarning(function(loaderItem, proceed){
-            console.log(loaderItem.getStatus() + ' ' + loaderItem.getError().code + ' ' + loaderItem.getError().errno + ' ' + loaderItem.getUrl());
-            proceed(loaderItem);
-        })
-        .onItemLoadComplete(function(loaderItem, proceed){
-            // Do some processing here, like Mongo DB saving or any other async task
-            proceed(loaderItem);
-        })
-        .load(queue, function(err, loaderItems){
-    
-            if(err){
-                throw err;
-            }
-    
-            _.each(loaderItems, function(loaderItem){
-    
-                var $cheerio = loaderItem.getResult();
-                
-                // Print out the anchor text for all links on the loaded page
-                if($cheerio){
-                    $cheerio('a').filter(function() {
-                        var text = $cheerio(this).text().trim();
-    
-                        if(text.length){
-                            console.log(text);
-                        }
-                    });
-                }
-            });
-        });
+   var Loader = require('bulk-html-loader')
+       , _ = require('lodash');
+   
+   // Each http request is encapsulated in a LoaderItem instance
+   var queue = [
+       new Loader.LoaderItem('http://google.com'),
+       new Loader.LoaderItem('http://stackoverflow.com'),
+       new Loader.LoaderItem('http://www.techrepublic.com')
+   ];
+   
+   // Create a BulkHtmlLoader instance and start the queue
+   new Loader()
+   
+       /**
+        * Custom warning callback (optional)
+        */
+       .onWarning(function(loaderItem, proceed){
+           console.log(loaderItem.toString()); // [Object LoaderItem] Warning {code} {description} {url}
+           proceed(loaderItem);
+       })
+   
+       /**
+        * Custom error callback (optional)
+        */
+       .onError(function(loaderItem, proceed){
+           console.log(loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
+           proceed(loaderItem);
+       })
+   
+       /**
+       * Individual url load complete callback (optional)
+       * Here you can save the result to a database, process the result etc.
+       * Or you can just wait the the entire queue to finish and handle all the items in the final callback
+       */
+       .onItemLoadComplete(function(loaderItem, proceed){
+           proceed(loaderItem);
+       })
+       .load(queue, function(err, loaderItems){
+   
+           if(err){
+               throw err;
+           }
+   
+           _.each(loaderItems, function(loaderItem){
+   
+               // Only process successful LoaderItems
+               if(loaderItem.getStatus() === Loader.LoaderItem.COMPLETE){
+   
+                   // Results are essentially jQuery objects
+                   var $cheerio = loaderItem.getResult();
+   
+                   // Print out the anchor text for all links on the loaded page
+                   $cheerio('a').filter(function() {
+                       var text = $cheerio(this).text().trim();
+   
+                       if(text.length){
+                           console.log(text);
+                       }
+                   });
+               }
+           });
+       });
+   
+```
+
+### Get the raw HTML from a LoaderItem
+
+LoaderItem results are cheerio / jQuery objects. This is how you get the raw HTML string:
+
+```js
+    loaderItem.getResult().html()   
 ```
 
 ### Attach a custom object to each load
@@ -149,6 +201,8 @@ In below example we are setting a country variable which will be accessible once
                throw err;
            }
    
+           // Sort the results after country
+   
            var uk = _.filter(loaderItems, function(loaderItem){
                return loaderItem.getData().country === 'United Kingdom';
            });
@@ -170,7 +224,7 @@ In below example we are setting a country variable which will be accessible once
 
 ### Granular control
 
-For each queue you can define maximum concurrent http requests, timeout and number of retries
+For each queue you can define the maximum number of concurrent http requests, timeout and number of retries
 
 ```js
     var Loader = require('bulk-html-loader')
@@ -191,6 +245,34 @@ For each queue you can define maximum concurrent http requests, timeout and numb
         });
 
 ```
+
+### Handling rejected http requests
+When loading hundreds or even thousands of pages from the same host eventually the requests are bound to be rejected. This happens for a number of reasons, typically because the host has a maximum number of requests per IP address per time unit.
+I've tested the tool and have loaded 20,000+ pages from the same host, but only one request at a time. It took 8 hours but completed without any errors or warnings. Just go easy and set the http throttle to 1. E.g myLoader.setHttpThrotte(1)
+
+### VPN
+If you need to load large quantities of pages from the same host I recommend doing so behind a VPN and switch IP from time to time.
+If one IP has been blacklistet from the host, you just switch country and start again.
+
+### Database integration
+If you're serious about loading large quantities of data from other websites you need some kind of persistant storage to keep track of which loads were successful and which were not.
+This way, and if anything goes haywire and the loader stops, you can restart the script from where you left off without any gaps in your data.
+
+If you have this need flick me an email and I can give an example written in MongoDB.
+
+### Unit tests
+Are located in /test
+
+### Examples
+Are location in /examples
+
+### Limitations
+When loading HTML pages anything that is not HTML (scripts, css, iframes, noscript etc) is stripped away.
+If this bothers you please lodge a ticket on Github and I will look into it.
+
+### Legalities
+I'm a software engineer and don't know the legalities around scraping contents from websites. Just be aware that you might be in violation with the website's terms of use. If you republish the contents you are likely to be in violation with copyright laws as well.
+So... If you get a nasty letter from a lawer don't come knocking on my door! Use responsibly.
 
 ### Installation
 

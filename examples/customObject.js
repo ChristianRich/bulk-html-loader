@@ -32,6 +32,8 @@ new Loader()
             throw err;
         }
 
+        // Sort the results after country
+
         var uk = _.filter(loaderItems, function(loaderItem){
             return loaderItem.getData().country === 'United Kingdom';
         });

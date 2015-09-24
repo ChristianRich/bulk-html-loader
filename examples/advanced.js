@@ -8,18 +8,31 @@ var queue = [
     new Loader.LoaderItem('http://www.techrepublic.com')
 ];
 
-// Create a BulkHtmlLoader instance and starts the queue
+// Create a BulkHtmlLoader instance and start the queue
 new Loader()
-    .onError(function(loaderItem, proceed){
-        console.log(loaderItem.getStatus() + ' ' + loaderItem.getError().code + ' ' + loaderItem.getError().errno + ' ' + loaderItem.getUrl());
-        proceed(loaderItem);
-    })
+
+    /**
+     * Custom warning callback (optional)
+     */
     .onWarning(function(loaderItem, proceed){
-        console.log(loaderItem.getStatus() + ' ' + loaderItem.getError().code + ' ' + loaderItem.getError().errno + ' ' + loaderItem.getUrl());
+        console.log(loaderItem.toString()); // [Object LoaderItem] Warning {code} {description} {url}
         proceed(loaderItem);
     })
+
+    /**
+     * Custom error callback (optional)
+     */
+    .onError(function(loaderItem, proceed){
+        console.log(loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
+        proceed(loaderItem);
+    })
+
+    /**
+    * Individual url load complete callback (optional)
+    * Here you can save the result to a database, process the result etc.
+    * Or you can just wait the the entire queue to finish and handle all the items in the final callback
+    */
     .onItemLoadComplete(function(loaderItem, proceed){
-        // Do some processing here, like Mongo DB saving or any other async task
         proceed(loaderItem);
     })
     .load(queue, function(err, loaderItems){
@@ -30,9 +43,13 @@ new Loader()
 
         _.each(loaderItems, function(loaderItem){
 
-            var $cheerio = loaderItem.getResult();
-            // Print out the anchor text for all links on the loaded page
-            if($cheerio){
+            // Only process successful LoaderItems
+            if(loaderItem.getStatus() === Loader.LoaderItem.COMPLETE){
+
+                // Results are essentially jQuery objects
+                var $cheerio = loaderItem.getResult();
+
+                // Print out the anchor text for all links on the loaded page
                 $cheerio('a').filter(function() {
                     var text = $cheerio(this).text().trim();
 
