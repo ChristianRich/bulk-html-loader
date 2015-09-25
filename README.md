@@ -60,33 +60,11 @@ $ npm install bulk-html-loader --save
            }
    
            _.each(loaderItems, function(loaderItem){
-   
-               var htmlRes;
-   
-               if(loaderItem.getResult()) {
-                   var cheerio = loaderItem.getResult();
-                   htmlRes = cheerio.html()
+               if(loaderItem.getStatus() === Loader.LoaderItem.COMPLETE){
+                   console.log(loaderItem.toString() + ' ' + loaderItem.getResult().html());
                }
-   
-               console.log(loaderItem.toString() + ' Html = "' + (truncateString(htmlRes) || null) + '"');
            });
        });
-   
-   // Helper - not important for this example
-   var truncateString = function(s, maxLen){
-   
-       if(!s){
-           return '';
-       }
-   
-       maxLen = maxLen || 100;
-   
-       if(s.length < maxLen + 1){
-           return s;
-       }
-   
-       return s.substr(0, maxLen) + ' ... (truncated)';
-   };
 ```
 
 ### Extracting all links from 3 websites
