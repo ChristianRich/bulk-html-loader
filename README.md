@@ -53,12 +53,17 @@ $ npm install bulk-html-loader --save
            console.log(loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
            proceed(loaderItem);
        })
+       
+       /**
+        * Final callback once the queue completes
+        */
        .load(queue, function(err, loaderItems){
    
            if(err){
                throw err;
            }
    
+           // Iterate through successful loads and output the html
            _.each(loaderItems, function(loaderItem){
                if(loaderItem.getStatus() === Loader.LoaderItem.COMPLETE){
                    console.log(loaderItem.toString() + ' ' + loaderItem.getResult().html());
