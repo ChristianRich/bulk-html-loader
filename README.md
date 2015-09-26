@@ -23,16 +23,13 @@ $ npm install bulk-html-loader --save
 ### Basic
 
 ```js
-
-   var Loader = require('bulk-html-loader')
-       , _ = require('lodash');
-   
+   var Loader = require('bulk-html-loader');
    
    // Each http request is encapsulated in a LoaderItem instance which keeps track of load progress, errors etc.
    var queue = [
        new Loader.LoaderItem('http://google.com'),
-       new Loader.LoaderItem('https://www.google.com/#q=hello'),
-       new Loader.LoaderItem('https://www.google.com/#q=nodejs')
+       new Loader.LoaderItem('https://www.bing.com'),
+       new Loader.LoaderItem('https://www.yahoo.com')
    ];
    
    // Create a BulkHtmlLoader instance and start the queue
@@ -41,19 +38,19 @@ $ npm install bulk-html-loader --save
        /**
         * Custom warning callback (optional)
         */
-       .onWarning(function(loaderItem, proceed){
-           console.log(loaderItem.toString()); // [Object LoaderItem] Warning {code} {description} {url}
-           proceed(loaderItem);
+       .onWarning(function(loaderItem, next){
+           console.log(this.getProgressString() + ' ' + loaderItem.toString()); // [Object LoaderItem] Warning {code} {description} {url}
+           next(loaderItem);
        })
    
        /**
         * Custom error callback (optional)
         */
-       .onError(function(loaderItem, proceed){
-           console.log(loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
-           proceed(loaderItem);
+       .onError(function(loaderItem, next){
+           console.log(this.getProgressString() + ' ' + loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
+           next(loaderItem);
        })
-       
+   
        /**
         * Final callback once the queue completes
         */
@@ -63,10 +60,10 @@ $ npm install bulk-html-loader --save
                throw err;
            }
    
-           // Iterate through successful loads and output the html
-           _.each(loaderItems, function(loaderItem){
+           loaderItems.forEach(function(loaderItem){
                if(loaderItem.getStatus() === Loader.LoaderItem.COMPLETE){
-                   console.log(loaderItem.toString() + ' ' + loaderItem.getResult().html());
+                   var cheerio = loaderItem.getResult();
+                   console.log(loaderItem.toString() + ' Html = ' + truncateString(cheerio.html()));
                }
            });
        });
@@ -75,7 +72,6 @@ $ npm install bulk-html-loader --save
 ### Extracting all links from 3 websites
 
 ```js
-
    var Loader = require('bulk-html-loader')
        , _ = require('lodash');
    
@@ -92,27 +88,32 @@ $ npm install bulk-html-loader --save
        /**
         * Custom warning callback (optional)
         */
-       .onWarning(function(loaderItem, proceed){
-           console.log(loaderItem.toString()); // [Object LoaderItem] Warning {code} {description} {url}
-           proceed(loaderItem);
+       .onWarning(function(loaderItem, next){
+           console.log(this.getProgressPercent() + '% ' + loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
+           next(loaderItem);
        })
    
        /**
         * Custom error callback (optional)
         */
-       .onError(function(loaderItem, proceed){
-           console.log(loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
-           proceed(loaderItem);
+       .onError(function(loaderItem, next){
+           console.log(this.getProgressPercent() + '% ' + loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
+           next(loaderItem);
        })
    
        /**
-       * Individual url load complete callback (optional)
-       * Here you can save the result to a database, process the result etc.
-       * Or you can just wait for the entire queue to finish and handle all the items in the final callback
-       */
-       .onItemLoadComplete(function(loaderItem, proceed){
-           proceed(loaderItem);
+        * Individual url load complete callback (optional)
+        * Here you can save the result to a database, process the result etc.
+        * Or you can just wait the the entire queue to finish and handle all the items in the final callback
+        */
+       .onItemLoadComplete(function(loaderItem, next){
+           console.log(this.getProgressPercent() + '% ' + loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
+           next(loaderItem);
        })
+   
+       /**
+        * Final callback once the queue completes
+        */
        .load(queue, function(err, loaderItems){
    
            if(err){
@@ -138,7 +139,6 @@ $ npm install bulk-html-loader --save
                }
            });
        });
-   
 ```
 
 ### Get the raw HTML from a LoaderItem
