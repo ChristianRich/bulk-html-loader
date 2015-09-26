@@ -14,27 +14,32 @@ new Loader()
     /**
      * Custom warning callback (optional)
      */
-    .onWarning(function(loaderItem, proceed){
-        console.log(loaderItem.toString()); // [Object LoaderItem] Warning {code} {description} {url}
-        proceed(loaderItem);
+    .onWarning(function(loaderItem, next){
+        console.log(this.getProgressPercent() + '% ' + loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
+        next(loaderItem);
     })
 
     /**
      * Custom error callback (optional)
      */
-    .onError(function(loaderItem, proceed){
-        console.log(loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
-        proceed(loaderItem);
+    .onError(function(loaderItem, next){
+        console.log(this.getProgressPercent() + '% ' + loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
+        next(loaderItem);
     })
 
     /**
-    * Individual url load complete callback (optional)
-    * Here you can save the result to a database, process the result etc.
-    * Or you can just wait the the entire queue to finish and handle all the items in the final callback
-    */
-    .onItemLoadComplete(function(loaderItem, proceed){
-        proceed(loaderItem);
+     * Individual url load complete callback (optional)
+     * Here you can save the result to a database, process the result etc.
+     * Or you can just wait the the entire queue to finish and handle all the items in the final callback
+     */
+    .onItemLoadComplete(function(loaderItem, next){
+        console.log(this.getProgressPercent() + '% ' + loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
+        next(loaderItem);
     })
+
+    /**
+     * Final callback once the queue completes
+     */
     .load(queue, function(err, loaderItems){
 
         if(err){
