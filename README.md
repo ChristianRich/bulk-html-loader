@@ -13,11 +13,10 @@ Features:
   - Event driven so you can handle individual warnings, errors and completed loads before the queue completes
   
 ### Installation
-
 ```sh
 $ npm install bulk-html-loader --save
 ```
-  
+
 # Examples
 
 ### Basic
@@ -63,7 +62,7 @@ $ npm install bulk-html-loader --save
            loaderItems.forEach(function(loaderItem){
                if(loaderItem.getStatus() === Loader.LoaderItem.COMPLETE){
                    var cheerio = loaderItem.getResult();
-                   console.log(loaderItem.toString() + ' Html = ' + truncateString(cheerio.html()));
+                   console.log(loaderItem.toString() + '\nHtml = ' + cheerio.html());
                }
            });
        });
@@ -144,7 +143,6 @@ $ npm install bulk-html-loader --save
 ### Get the raw HTML from a LoaderItem
 
 LoaderItem results are cheerio / jQuery objects. This is how you get the raw HTML string:
-
 ```js
     loaderItem.getResult().html()   
 ```
@@ -191,7 +189,6 @@ In below example we are setting a country variable which will be accessible once
            }
    
            // Sort the results after country
-   
            var uk = _.filter(loaderItems, function(loaderItem){
                return loaderItem.getData().country === 'United Kingdom';
            });
@@ -208,7 +205,6 @@ In below example we are setting a country variable which will be accessible once
            console.log(us);
            console.log(au);
        });
-
 ```
 
 ### Granular control
@@ -216,8 +212,7 @@ In below example we are setting a country variable which will be accessible once
 For each queue you can define the maximum number of concurrent http requests, timeout and number of retries
 
 ```js
-    var Loader = require('bulk-html-loader')
-        , _ = require('lodash');
+    var Loader = require('bulk-html-loader');
     
     var queue = [
         new Loader.LoaderItem('http://google.com'),
@@ -237,7 +232,10 @@ For each queue you can define the maximum number of concurrent http requests, ti
 
 ### Handling rejected http requests
 When loading hundreds or even thousands of pages from the same host eventually the requests are bound to be rejected. This happens for a number of reasons, typically because the host has a maximum number of requests per IP address per time unit.
-I've tested the tool and have loaded 20,000+ pages from the same host, but only one request at a time. It took 8 hours but completed without any errors or warnings. Just go easy and set the http throttle to 1. E.g myLoader.setHttpThrotte(1)
+I've tested the tool and have loaded 20,000+ pages from the same host, but only one request at a time. It took 8 hours but completed without any errors or warnings. Just go easy and set the http throttle to 1:
+```js
+myLoader.setHttpThrotte(1)
+```
 
 ### VPN
 If you need to load large quantities of pages from the same host I recommend doing so behind a VPN and switch IP from time to time.
@@ -250,19 +248,18 @@ This way, and if anything goes haywire and the loader stops, you can restart the
 If you have this need flick me an email and I can give an example written in MongoDB.
 
 ### Unit tests
-Located in /test
-
-To run the tests:
+Check out the repo and run the tests:
+```sh
 npm test 
+```
 
 ### Examples
-Located in /examples
-
-To run the examples:
-
+Check out the repo and run the examples:
+```sh
 node examples/basic
 node examples/advanced
 node examples/customObject
+```
 
 ### Limitations
 When loading HTML pages anything that is not HTML (scripts, css, iframes, noscript etc) is stripped away.
