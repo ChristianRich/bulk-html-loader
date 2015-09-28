@@ -7,8 +7,9 @@ Features:
   - Queueing
   - Automatic retries
   - Graceful error handling
-  - Continuous loading on errors (don't stop the queue because some urls fail)
+  - Continuous loading on errors
   - Configure maximum number of concurrent HTTP requests, retries and load timeout
+  - Automatically reduce the number of concurrent HTTP requests on errors
   - Random user agent string in each HTTP request (lower risk of the remote server rejecting the request)
   - Event driven so you can handle individual warnings, errors and completed loads before the queue completes
   
@@ -55,14 +56,11 @@ $ npm install bulk-html-loader --save
         */
        .load(queue, function(err, loaderItems){
    
-           if(err){
-               throw err;
-           }
+           if(err) throw err;
    
            loaderItems.forEach(function(loaderItem){
-               if(loaderItem.getStatus() === Loader.LoaderItem.COMPLETE){
-                   var cheerio = loaderItem.getResult();
-                   console.log(loaderItem.toString() + '\nHtml = ' + cheerio.html());
+               if(loaderItem.getResult()){
+                   console.log(loaderItem.toString() + '\nHtml = ' + loaderItem.getResult().html());
                }
            });
        });

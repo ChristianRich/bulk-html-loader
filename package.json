@@ -1,11 +1,12 @@
 {
   "name": "bulk-html-loader",
   "description": "Scrape HTML from thousands of webpages in one go",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "main": "index.js",
   "files": [
     "index.js",
-    "/lib"
+    "/lib",
+    "/test"
   ],
   "author": "Christian Rich <christianrich.me@gmail.com>",
   "repository": {
