@@ -227,7 +227,7 @@ describe('HtmlLoader', function() {
         new Loader()
         .setHttpTimeout(1000)
         .setNumRetries(3)
-        .setHttpThrottle(5)
+        .setMaxConcurrentConnections(5)
         .onWarning(function(loaderItem, done){
             done(loaderItem);
         })
