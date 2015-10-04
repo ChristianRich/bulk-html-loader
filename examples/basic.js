@@ -1,13 +1,13 @@
 var Loader = require('../lib/BulkHtmlLoader');
 
-// Each http request is encapsulated in a LoaderItem instance which keeps track of load progress, errors etc.
+// Create the queue
 var queue = [
-    new Loader.LoaderItem('http://google.com'),
-    new Loader.LoaderItem('https://www.bing.com'),
-    new Loader.LoaderItem('https://www.yahoo.com')
+    'http://google.com',
+    'https://www.bing.com',
+    'https://www.yahoo.com'
 ];
 
-// Create a BulkHtmlLoader instance and start the queue
+// Create a new BulkHtmlLoader instance
 new Loader()
 
     /**
@@ -27,7 +27,14 @@ new Loader()
     })
 
     /**
-     * Final callback once the queue completes
+     * Custom callback for any status change (optional)
+     */
+    .onChange(function(loaderItem){
+        console.log(this.toString() + ' ' + loaderItem.toString()); // [Object BulkHtmlLoader] progress: 1/500, success: 1, warnings: 0, errors: 0, current open connections: 24, max concurrent connections: 25
+    })
+
+    /**
+     * Start the queue and wait for final callback
      */
     .load(queue, function(err, loaderItems){
 
