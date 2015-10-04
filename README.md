@@ -25,14 +25,14 @@ $ npm install bulk-html-loader --save
 ```js
    var Loader = require('bulk-html-loader');
    
-   // Each http request is encapsulated in a LoaderItem instance which keeps track of load progress, errors etc.
+   // Build the queue
    var queue = [
-       new Loader.LoaderItem('http://google.com'),
-       new Loader.LoaderItem('https://www.bing.com'),
-       new Loader.LoaderItem('https://www.yahoo.com')
+       'http://google.com',
+       'https://www.bing.com',
+       'https://www.yahoo.com'
    ];
    
-   // Create a BulkHtmlLoader instance and start the queue
+   // Create a BulkHtmlLoader instance
    new Loader()
    
        /**
@@ -50,9 +50,10 @@ $ npm install bulk-html-loader --save
            console.log(this.getProgressString() + ' ' + loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
            next(loaderItem);
        })
-   
+       
        /**
         * Final callback once the queue completes
+        * The result array consists of LoaderItems objects
         */
        .load(queue, function(err, loaderItems){
    
@@ -72,14 +73,14 @@ $ npm install bulk-html-loader --save
    var Loader = require('bulk-html-loader')
        , _ = require('lodash');
    
-   // Each http request is encapsulated in a LoaderItem instance
+   // Build the queue
    var queue = [
-       new Loader.LoaderItem('http://google.com'),
-       new Loader.LoaderItem('http://stackoverflow.com'),
-       new Loader.LoaderItem('http://www.techrepublic.com')
+       'http://google.com',
+       'http://stackoverflow.com',
+       'http://www.techrepublic.com'
    ];
    
-   // Create a BulkHtmlLoader instance and start the queue
+   // Create a BulkHtmlLoader instance
    new Loader()
    
        /**
@@ -155,7 +156,7 @@ In below example we are setting a country variable which will be accessible once
    var Loader = require('bulk-html-loader')
        , _ = require('lodash');
    
-   // Build a queue with arbitrary data objects that is attached to the LoaderItem
+   // Build a queue with arbitrary data objects that is attached to LoaderItem instances
    var queue = [
        new Loader.LoaderItem('http://smh.com.au', {
            country: 'Australia'
@@ -178,7 +179,7 @@ In below example we are setting a country variable which will be accessible once
        })
    ];
    
-   // Create a BulkHtmlLoader instance and start the queue
+   // Create a BulkHtmlLoader instance
    new Loader()
        .load(queue, function(err, loaderItems){
    
@@ -213,9 +214,9 @@ For each queue you can define the maximum number of concurrent http requests, ti
     var Loader = require('bulk-html-loader');
     
     var queue = [
-        new Loader.LoaderItem('http://google.com'),
-        new Loader.LoaderItem('https://www.google.com/#q=hello'),
-        new Loader.LoaderItem('https://www.google.com/#q=nodejs')
+        'http://google.com',
+        'https://www.google.com/#q=hello',
+        'https://www.google.com/#q=nodejs'
     ];
     
     new Loader()
