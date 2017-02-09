@@ -1,9 +1,9 @@
-var Loader = require('../lib/BulkHtmlLoader')
+const Loader = require('../lib/BulkHtmlLoader')
     , _ = require('lodash');
 
 // Build a queue with arbitrary data objects that is attached to the LoaderItem
 // Instead of injecting String urls into the queue, you have to wrap the urls in LoaderItem instances
-var queue = [
+const queue = [
     new Loader.LoaderItem('http://smh.com.au', {
         country: 'Australia'
     }),
@@ -46,15 +46,15 @@ new Loader()
 
         // Sort the results after country
 
-        var uk = _.filter(loaderItems, function(loaderItem){
+        const uk = _.filter(loaderItems, function(loaderItem){
             return loaderItem.getData().country === 'United Kingdom';
         });
 
-        var us = _.filter(loaderItems, function(loaderItem){
+        const us = _.filter(loaderItems, function(loaderItem){
             return loaderItem.getData().country === 'USA';
         });
 
-        var au = _.filter(loaderItems, function(loaderItem){
+        const au = _.filter(loaderItems, function(loaderItem){
             return loaderItem.getData().country === 'Australia';
         });
     });

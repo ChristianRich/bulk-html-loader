@@ -1,13 +1,16 @@
 {
   "name": "bulk-html-loader",
   "description": "Scrape HTML from thousands of webpages in one go",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "main": "index.js",
   "files": [
     "index.js",
     "/lib",
     "/test"
   ],
+  "engines": {
+    "node": ">6.9.0"
+  },
   "author": "Christian Rich <christianrich.me@gmail.com>",
   "repository": {
     "type": "git",
@@ -32,18 +35,19 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "async": "1.4.2",
-    "cheerio": "^0.19.0",
-    "lodash": "^3.10.1",
-    "request": "^2.61.0",
+    "async": "^2.1.4",
+    "bluebird": "^3.4.7",
+    "cheerio": "^0.22.0",
+    "lodash": "^4.17.4",
+    "request": "^2.79.0",
     "uuid": "^2.0.1"
   },
   "devDependencies": {
     "mocha": "latest",
+    "nock": "^9.0.4",
     "ping": "^0.1.10",
     "should": "^7.1.0"
   },
-
   "browserDependencies": "",
   "bugs": {
     "url": "https://github.com/ChristianRich/bulk-html-loader/issues"

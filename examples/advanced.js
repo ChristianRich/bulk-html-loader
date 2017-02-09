@@ -1,15 +1,14 @@
-var Loader = require('../lib/BulkHtmlLoader')
+const Loader = require('../lib/BulkHtmlLoader')
     , _ = require('lodash');
 
-// Each http request is encapsulated in a LoaderItem instance
-var queue = [
-    new Loader.LoaderItem('http://google.com'),
-    new Loader.LoaderItem('http://stackoverflow.com'),
-    new Loader.LoaderItem('http://www.techrepublic.com')
+const queue = [
+    'http://google.com',
+    'http://stackoverflow.com',
+    'http://www.techrepublic.com'
 ];
 
 // Create a BulkHtmlLoader instance and start the queue
-new Loader()
+const loader = new Loader(true) // Pass true for verbose logging
 
     /**
      * Custom warning callback (optional)
@@ -33,7 +32,9 @@ new Loader()
      * Or you can just wait the the entire queue to finish and handle all the items in the final callback
      */
     .onItemLoadComplete(function(loaderItem, next){
-        console.log(this.getProgressPercent() + '% ' + loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
+        //console.log(this.getProgressPercent() + '% ' + loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
+
+        console.log('item complete ' + loader.toString())
         next(loaderItem);
     })
 
@@ -41,6 +42,9 @@ new Loader()
      * Final callback once the queue completes
      */
     .load(queue, function(err, loaderItems){
+
+        console.log('******* Final callback')
+        return console.log(loader.toString());
 
         if(err){
             throw err;
@@ -52,11 +56,11 @@ new Loader()
             if(loaderItem.getStatus() === Loader.LoaderItem.COMPLETE){
 
                 // Results are essentially jQuery objects
-                var $cheerio = loaderItem.getResult();
+                let $cheerio = loaderItem.getResult();
 
                 // Print out the anchor text for all links on the loaded page
                 $cheerio('a').filter(function() {
-                    var text = $cheerio(this).text().trim();
+                    let text = $cheerio(this).text().trim();
 
                     if(text.length){
                         console.log(text);

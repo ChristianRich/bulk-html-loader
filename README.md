@@ -23,10 +23,10 @@ $ npm install bulk-html-loader --save
 ### Basic
 
 ```js
-   var Loader = require('bulk-html-loader');
+   const Loader = require('bulk-html-loader');
    
    // Build the queue
-   var queue = [
+   const queue = [
        'http://google.com',
        'https://www.bing.com',
        'https://www.yahoo.com'
@@ -70,11 +70,11 @@ $ npm install bulk-html-loader --save
 ### Extracting all links from 3 websites
 
 ```js
-   var Loader = require('bulk-html-loader')
+   const Loader = require('bulk-html-loader')
        , _ = require('lodash');
    
    // Build the queue
-   var queue = [
+   const queue = [
        'http://google.com',
        'http://stackoverflow.com',
        'http://www.techrepublic.com'
@@ -143,7 +143,7 @@ $ npm install bulk-html-loader --save
 
 LoaderItem results are cheerio / jQuery objects. This is how you get the raw HTML string:
 ```js
-    loaderItem.getResult().html()   
+    loaderItem.getResult().html();
 ```
 
 ### Attach a custom object to each load
@@ -211,9 +211,9 @@ In below example we are setting a country variable which will be accessible once
 For each queue you can define the maximum number of concurrent http requests, timeout and number of retries
 
 ```js
-    var Loader = require('bulk-html-loader');
+    const Loader = require('bulk-html-loader');
     
-    var queue = [
+    const queue = [
         'http://google.com',
         'https://www.google.com/#q=hello',
         'https://www.google.com/#q=nodejs'
@@ -233,7 +233,7 @@ For each queue you can define the maximum number of concurrent http requests, ti
 When loading hundreds or even thousands of pages from the same host eventually the requests are bound to be rejected. This happens for a number of reasons, typically because the host has a maximum number of requests per IP address per time unit.
 I've tested the tool and have loaded 20,000+ pages from the same host, but only one request at a time. It took 8 hours but completed without any errors or warnings. Just go easy and set the http throttle to 1:
 ```js
-myLoader.setHttpThrotte(1)
+myLoader.setHttpThrotte(1);
 ```
 
 ### VPN

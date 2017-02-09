@@ -1,20 +1,22 @@
-var Loader = require('../lib/BulkHtmlLoader');
+const Loader = require('../lib/BulkHtmlLoader');
 
 // Create the queue
-var queue = [
+const queue = [
     'http://google.com',
     'https://www.bing.com',
     'https://www.yahoo.com'
 ];
 
 // Create a new BulkHtmlLoader instance
-new Loader()
+const loader = new Loader();
+
+    loader
 
     /**
      * Custom warning callback (optional)
      */
     .onWarning(function(loaderItem, next){
-        console.log(this.getProgressString() + ' ' + loaderItem.toString()); // [Object LoaderItem] Warning {code} {description} {url}
+        console.log('WARN ' + this.getProgressString() + ' ' + loaderItem.toString()); // [Object LoaderItem] Warning {code} {description} {url}
         next(loaderItem);
     })
 
@@ -22,7 +24,7 @@ new Loader()
      * Custom error callback (optional)
      */
     .onError(function(loaderItem, next){
-        console.log(this.getProgressString() + ' ' + loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
+        console.log('ERROR ' + this.getProgressString() + ' ' + loaderItem.toString()); // [Object LoaderItem] Error {code} {description} {url}
         next(loaderItem);
     })
 
@@ -30,7 +32,7 @@ new Loader()
      * Custom callback for any status change (optional)
      */
     .onChange(function(loaderItem){
-        console.log(this.toString() + ' ' + loaderItem.toString()); // [Object BulkHtmlLoader] progress: 1/500, success: 1, warnings: 0, errors: 0, current open connections: 24, max concurrent connections: 25
+        console.log('CHANGE ' + this.toString() + ' ' + loaderItem.toString()); // [Object BulkHtmlLoader] progress: 1/500, success: 1, warnings: 0, errors: 0, current open connections: 24, max concurrent connections: 25
     })
 
     /**
@@ -43,8 +45,8 @@ new Loader()
         }
 
         loaderItems.forEach(function(loaderItem){
-            if(loaderItem.getStatus() === Loader.LoaderItem.COMPLETE){
-                var cheerio = loaderItem.getResult();
+            if(loaderItem.getStatus() === 'complete'){
+                const cheerio = loaderItem.getResult();
                 console.log(loaderItem.toString() + ' Html = ' + truncateString(cheerio.html()));
             }
         });
@@ -56,7 +58,7 @@ new Loader()
  * @param maxLen
  * @returns {*}
  */
-var truncateString = function(s, maxLen){
+const truncateString = function(s, maxLen){
     if(!s) return '';
     maxLen = maxLen || 100;
     if(s.length < maxLen + 1) return s;

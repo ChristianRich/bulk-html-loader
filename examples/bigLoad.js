@@ -1,11 +1,11 @@
-var Loader = require('../lib/BulkHtmlLoader');
+const Loader = require('../lib/BulkHtmlLoader');
 
 /**
- * Let's load 500 urls and open a lot of concurrent connections
- * In this example all of the loaded domains are different, so we could potentially open 1000 connections at a time - which would be unwise if all 500 urls sat on the same domain!
- * In a real world example below urls would be digested from a feed or external source and then added to the loader using a loop
+ * Let's load 500 urls using 100 concurrent connections
+ * Some of these urls have undoubtedly expired and no longer works. And that's the whole point of this exercise.
+ * Even though some requests will fail we still want to get the results from the successful ones.
  */
-var queue = [
+const queue = [
     'http://www.facebook.com',
     'http://www.yahoo.com',
     'http://www.live.com',
@@ -512,7 +512,7 @@ var queue = [
 new Loader()
     .setNumRetries(3)
     .setHttpTimeout(5000)
-    .setMaxConcurrentConnections(10)
+    .setMaxConcurrentConnections(100)
 
     /**
      * Optional callback for any status change
@@ -532,6 +532,7 @@ new Loader()
 
         console.log('done ' + loaderItems.length);
 
+        // Iterate through the successful ones and get the result
         loaderItems.forEach(function(loaderItem){
             if(loaderItem.getStatus() === Loader.LoaderItem.COMPLETE){
                // Handle results
