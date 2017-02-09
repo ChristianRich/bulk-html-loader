@@ -219,7 +219,6 @@ describe('HtmlLoader', function() {
 
         loader.onWarning(function(loaderItem, next){
             warningCount++;
-            // console.log(loaderItem.getStatus() + ' ' + loaderItem.getError().errno + ' ' + loaderItem.getUrl());
             next(loaderItem);
         });
 
@@ -255,19 +254,16 @@ describe('HtmlLoader', function() {
 
         loader.onWarning(function(loaderItem, done){
             warningCount++;
-            //console.log(loaderItem.getStatus() + ' ' + this.getProgress().loaded + '/' + this.getProgress().total);
             done(loaderItem);
         });
 
         loader.onError(function(loaderItem, done){
             errorCount++;
-            //console.log(loaderItem.getStatus() + ' ' + this.getProgress().loaded + '/' + this.getProgress().total);
             done(loaderItem);
         });
 
         loader.onItemLoadComplete(function(loaderItem, done){
             itemCompleteCount++;
-            //console.log(loaderItem.getStatus() + ' ' + this.getProgress().loaded + '/' + this.getProgress().total);
             done(loaderItem);
         });
 
@@ -319,5 +315,23 @@ describe('HtmlLoader', function() {
             assert(_.isArray(results), 'results should be an Array');
             done();
         });
+    });
+
+    it('should change events.EventEmitter.defaultMaxListeners', function (done) {
+
+        const queue = [
+            'http://www.google.com'
+        ];
+
+        nock(queue[0])
+            .get('/')
+            .reply(200, mockGoogle);
+
+        const loader1 = new Loader();
+        loader1.setMaxConcurrentConnections(100);
+        assert(loader1._maxConcurrentConnections === 100, 'events.EventEmitter.defaultMaxListeners should be 100');
+        const loader2 = new Loader();
+        assert(loader2._maxConcurrentConnections === 10, 'Should reset global var "events.EventEmitter.defaultMaxListeners" to 10 when creating a new loader instance');
+        done();
     });
 });
