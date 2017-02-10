@@ -4,7 +4,7 @@ const Loader = require('../lib/BulkHtmlLoader')
 const queue = [
     'http://google.com',
     'http://stackoverflow.com',
-    'http://some-invalid-url-that-should-not-stop-the-processing.com', // If an url cannot load after x attempts it is skipped
+    'http://some-invalid-url-that-should-not-stop-the-processing.com', // If an url cannot load after x attempts it is simply skipped
     'http://www.techrepublic.com'
 ];
 
