@@ -220,7 +220,7 @@ For each queue you can define the maximum number of concurrent http requests, ti
     ];
     
     new Loader()
-        .setHttpThrottle(10) // Process 10 urls at a time
+        .setMaxConcurrentConnections(10) // Process 10 urls at a time
         .setHttpTimeout(2000) // Retry loads that do not complete after 2 seconds
         .setNumRetries(5) // Should any errors occur, retry 5 times. After this the load is flagged as error and will not have a result
         .load(queue, function(err, loaderItems){
@@ -323,7 +323,7 @@ const saveToDB = function(loaderItem, result, next){
 When loading hundreds or even thousands of pages from the same host eventually the requests are bound to be rejected. This happens for a number of reasons, typically because the host has a maximum number of requests per IP address per time unit.
 I've tested the tool and have loaded 20,000+ pages from the same host, but only one request at a time. It took 8 hours but completed without any errors or warnings. Just go easy and set the http throttle to 1:
 ```js
-myLoader.setHttpThrotte(1);
+myLoader.setMaxConcurrentConnections(1);
 ```
 
 ### VPN
